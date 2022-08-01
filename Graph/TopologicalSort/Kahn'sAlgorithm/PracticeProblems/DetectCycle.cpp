@@ -14,19 +14,21 @@ using namespace std;
 //      c.Incremenet Count
 // 6. return whether count is equal to number of verices
 
-//Implementation
+// Implementation
 
-void addEdge(vector<int>adj[],int source,int destination){
+void addEdge(vector<int> adj[], int source, int destination)
+{
     adj[source].push_back(destination);
 }
 
-
-int DetectCycleUsingTopologicalSort(vector<int> adj[],int V){
+int DetectCycleUsingTopologicalSort(vector<int> adj[], int V)
+{
 
     // 1. Store Indegree of every Vertex
-    vector<int>indegree(V,0);
-    for(int currentVertex ; currentVertex < V ; currentVertex++){
-        for(int adjacentOfCurrentVertex:adj[currentVertex])
+    vector<int> indegree(V, 0);
+    for (int currentVertex; currentVertex < V; currentVertex++)
+    {
+        for (int adjacentOfCurrentVertex : adj[currentVertex])
             indegree[adjacentOfCurrentVertex]++;
     }
 
@@ -34,8 +36,9 @@ int DetectCycleUsingTopologicalSort(vector<int> adj[],int V){
     queue<int> q;
 
     // 3. Add all 0 indegree vertices into the q;
-    for(int i = 0 ; i < V ; i++){
-        if(indegree[i]==0)
+    for (int i = 0; i < V; i++)
+    {
+        if (indegree[i] == 0)
             q.push(i);
     }
 
@@ -43,21 +46,23 @@ int DetectCycleUsingTopologicalSort(vector<int> adj[],int V){
     int count = 0;
 
     // 5. While q is not empty
-    while(!q.empty()){
+    while (!q.empty())
+    {
         // a. pop front node u of q
         int u = q.front();
         q.pop();
 
         // b. for every adjacent vertex of u
-        for(int x : adj[u]){
+        for (int x : adj[u])
+        {
             // i.  Reduce indegree of vertex by 1
             indegree[x]--;
 
             // ii. If indegree becomes 0 add it to the q.
-            if(indegree[x] == 0)
+            if (indegree[x] == 0)
                 q.push(x);
         }
-           
+
         // c.Incremenet Count
         count++;
     }
@@ -66,22 +71,24 @@ int DetectCycleUsingTopologicalSort(vector<int> adj[],int V){
     return count == V;
 }
 
+int main()
+{
 
-int main(){
-
-    int Vertices,Edges;
-    cin >> Vertices>>Edges;
+    int Vertices, Edges;
+    cin >> Vertices >> Edges;
     vector<int> adjacencyList[Vertices];
 
-    while(Edges--){
-        int firstNode,secondNode;
+    while (Edges--)
+    {
+        int firstNode, secondNode;
         cin >> firstNode >> secondNode;
-        addEdge(adjacencyList,firstNode,secondNode);
+        addEdge(adjacencyList, firstNode, secondNode);
     }
 
-    if(!DetectCycleUsingTopologicalSort(adjacencyList,Vertices))
-        cout<<"Cycle Detected"<<endl;
-    else cout<<"No Cycle"<<endl;
+    if (!DetectCycleUsingTopologicalSort(adjacencyList, Vertices))
+        cout << "Cycle Detected" << endl;
+    else
+        cout << "No Cycle" << endl;
 
     return 0;
 }
