@@ -1,4 +1,4 @@
-# CSE 2202 - Design of Algorithm - I
+# CSE 2202 - Design & Analysis of Algorithm - I
 
 This repository is for the particular course topics and codes which are offered by the Department of Computer Science & Engineering of the University of Dhaka.
 The Topics which are covered in this course are :
