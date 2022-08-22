@@ -5,6 +5,8 @@
     "string": "cpp",
     "s": "cpp",
     "*.tcc": "cpp",
-    "list": "cpp"
+    "list": "cpp",
+    "type_traits": "cpp",
+    "valarray": "cpp"
   }
 }
