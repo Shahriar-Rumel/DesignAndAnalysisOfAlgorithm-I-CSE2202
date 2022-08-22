@@ -1,0 +1,2 @@
+Cost of building the MST : 27501960344011
+Time taken to complete the task : 5.000000
