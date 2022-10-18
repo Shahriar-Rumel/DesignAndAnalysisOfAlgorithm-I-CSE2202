@@ -1,0 +1,2 @@
+Min Number of Multiplication : 2147483647
+Time Taken : 953 ms

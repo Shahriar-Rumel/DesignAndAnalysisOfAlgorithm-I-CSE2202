@@ -7,6 +7,9 @@
     "*.tcc": "cpp",
     "list": "cpp",
     "type_traits": "cpp",
-    "valarray": "cpp"
+    "valarray": "cpp",
+    "chrono": "cpp",
+    "random": "cpp",
+    "limits": "cpp"
   }
 }
