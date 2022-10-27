@@ -10,6 +10,7 @@
     "valarray": "cpp",
     "chrono": "cpp",
     "random": "cpp",
-    "limits": "cpp"
+    "limits": "cpp",
+    "ostream": "cpp"
   }
 }
