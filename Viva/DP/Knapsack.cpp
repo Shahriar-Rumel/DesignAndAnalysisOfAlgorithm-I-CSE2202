@@ -3,9 +3,10 @@ using namespace std;
 
 #define ll long long
 
+vector<pair<ll,ll>>parent;
+
 
 ll knapsackRecursive(ll w,ll weight[],ll val[],ll n){
-
 
     if(n == -1 || w == 0 ) return 0;
 
@@ -13,13 +14,11 @@ ll knapsackRecursive(ll w,ll weight[],ll val[],ll n){
     if(weight[n] > w) return knapsackRecursive(w,weight,val,n - 1);
 
     // Considering Current Element but deciding whether to include it to the result or not
-
     else return max(val[n] + knapsackRecursive(w - weight[n],weight,val,n - 1),knapsackRecursive(w,weight,val,n - 1));
 }
 
 
 ll knapsackMemoization(ll w,ll weight[],ll val[],ll n,vector<vector<int>> &dp){
-
 
     if(n < 0 ) return 0;
 
@@ -40,24 +39,69 @@ ll knapsackMemoization(ll w,ll weight[],ll val[],ll n,vector<vector<int>> &dp){
 }
 
 
-ll knapsackTabulation(ll w,ll weight[],ll val[],ll n){
+ll knapsackTabulation(vector<vector<ll>> &dp,ll w,ll weight[],ll val[],ll n){
 
-
-    vector<vector<ll>> dp(n + 1,vector<ll>(w + 1));
-   
-    for(ll i = 0 ; i <= n ; i++)
+    // parent.assign(n+1,{});
+    
+    for(ll i = 0 ; i <= n ; i++) {
+        // cout<<endl;
         for(ll j = 0 ; j <= w  ; j++) {
-            if(i == 0 || j == 0 ) dp[i][j] = 0;
+            if(i == 0 || j == 0 ){
+                dp[i][j] = 0;
+                // cout<<dp[i][j]<<" ";
+            } 
 
             // Considering Current Element but deciding whether to include it to the result or not
-            else if(weight[i] <= w) dp[i][j] = val[i-1] + dp[i-1][w - weight[i-1]] >  dp[i-1][j] ?  val[i-1] + dp[i-1][w - weight[i-1]]: dp[i-1][j] ;
+            else if(weight[i-1] <= j) {
+
+                if(val[i-1] + dp[i-1][j - weight[i-1]] >  dp[i-1][j]){
+                    dp[i][j] = val[i-1] + dp[i-1][j - weight[i-1]];
+                    parent.push_back({i-1,j - weight[i-1]});
+                }else{
+                    dp[i][j] = dp[i-1][j];
+                    parent.push_back({i-1,j});
+                }
+                // dp[i][j] = val[i-1] + dp[i-1][j - weight[i-1]] >  dp[i-1][j] ?  val[i-1] + dp[i-1][j - weight[i-1]]: dp[i-1][j] ;
+                // cout<<dp[i][j]<<" ";
+            }
 
             // Not considering current Element
-            else dp[i][j] = dp[i-1][j];
+            else{
+              dp[i][j] = dp[i-1][j];
+            //   cout<<dp[i][j]<<" ";
+            } 
 
         }
+    }
+    parent.push_back({n,w});
+    return dp[n][w];
+}
 
-        return dp[n][w];
+void printPath(vector<vector<ll>> &dp,ll n , ll w,ll weight[]){
+
+    ll i = n , j = w;
+
+    vector<ll>res;
+
+    while( i > 0 && j > 0){
+            if(dp[i][j] == dp[i][j-1]){
+                j--;
+                // cout<<dp[i][j]<<" ";
+                // flag = true;
+            } else if(dp[i-1][j] == dp[i][j]){
+                i--;
+            }
+            else {
+                // cout<<dp[i-1][j-weight[i-1]]<<" ";
+                // cout <<dp[i][j]<<" ";
+                res.push_back(dp[i][j]);
+                j = j - weight[i-1];
+                i--;
+            }
+    }
+
+    reverse(res.begin(),res.end());
+    for(auto it: res) cout<<it<<" ";
 }
 int main(){
     ll n,w;
@@ -66,16 +110,19 @@ int main(){
     for(ll i = 0 ; i < n ; i++) cin >> val[i];
     for(ll i = 0 ; i < n ; i++) cin >> weight[i];
 
-    cout<<"Maximum Value with Recursive Implementation : "<<knapsackRecursive(w,weight,val,n - 1)<<endl;
+    // cout<<"Maximum Value with Recursive Implementation : "<<knapsackRecursive(w,weight,val,n - 1)<<endl;
 
-    vector<vector<int>> dp(n,vector<int>(w,-1));
+    // vector<vector<int>> dp(n + 1,vector<int>(w + 1,-1));
 
-    for(ll i = 0 ; i < n ; i++)
-        for(ll j = 0 ; j < w + 1 ; j++) dp[i].push_back(-1) ;
+    // for(ll i = 0 ; i <= n ; i++)
+    //     for(ll j = 0 ; j <= w + 1 ; j++) dp[i].push_back(-1) ;
 
-    cout<<"Maximum Value with Memoization Implementation : "<<knapsackMemoization(w,weight,val,n - 1,dp)<<endl;
+    // cout<<"Maximum Value with Memoization Implementation : "<<knapsackMemoization(w,weight,val,n - 1,dp)<<endl;
 
 
-    cout<<"Maximum Value with Tabulation Implementation : "<<knapsackTabulation(w,weight,val,n - 1)<<endl;
+    vector<vector<ll>> dp(n + 1,vector<ll>(w + 1));
+    cout<<"Maximum Value with Tabulation Implementation : "<<knapsackTabulation(dp,w,weight,val,n)<<endl;
+
+    printPath(dp,n,w,weight);
 
 }
